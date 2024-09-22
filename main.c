@@ -150,9 +150,12 @@ void timer_cleanup();
 //
 
 void main() {
+    uint8_t old_video_mode;
+
     timer_init();
     keyb_init();
 
+    old_video_mode = get_video_mode();
     set_video_mode(GRAPHICS_MODE);
     vga_vsync();
     // TODO: Set VGA palette here
@@ -171,7 +174,7 @@ void main() {
         print_time_and_fps();
     }
 
-    set_video_mode(0x3);
+    set_video_mode(old_video_mode);
 
     keyb_cleanup();
     timer_cleanup();
