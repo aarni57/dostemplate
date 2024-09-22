@@ -1,6 +1,8 @@
 #ifndef KEYS_H
 #define KEYS_H
 
+#include <stdint.h>
+
 enum {
     KEY_NULL,
 

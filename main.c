@@ -1,10 +1,7 @@
 #include <stdio.h>
+#include <string.h>
 #include <dos.h>
 #include <conio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <malloc.h>
 
 #include "util.h"
 #include "bios.h"
@@ -13,8 +10,8 @@
 //
 
 static uint8_t quit = 0;
-static uint64_t frame_time_us;
-static uint32_t delta_time_us;
+static uint64_t frame_time_us = 0;
+static uint32_t delta_time_us = 0;
 static uint16_t fps = 0;
 
 //
@@ -60,9 +57,10 @@ static void update_input() {
 }
 
 //
-
+// Timer divisor can be changed in timer.asm
+// 1193180Hz / 4096 (0x1000) = 291.304Hz
 #define TIMER_TICK_USEC 3433 // 1000000 / 291.304Hz
-#define TIMER_TICK_USEC_COMP -2 // Compensation every 16th timer_update
+#define TIMER_TICK_USEC_COMP -2 // Compensation every 16th timer_tick
 
 static volatile uint64_t timer_us = 0; // Microseconds since program start
 
@@ -75,7 +73,7 @@ static inline uint64_t read_timer() {
 }
 
 void timer_tick(uint8_t counter) {
-    // Called by the timer interrupt handler (291.304Hz)
+    // Called by the timer interrupt handler
     timer_us += TIMER_TICK_USEC;
     if (counter == 0) 
         timer_us += TIMER_TICK_USEC_COMP;

@@ -1,7 +1,6 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <conio.h>
 #include <stdint.h>
 
 static inline void kb_clear_buffer();
