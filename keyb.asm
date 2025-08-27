@@ -54,7 +54,6 @@ keyb_isr:
     push bx
     push cx
     push dx
-    push sp
     push bp
     push si
     push di
@@ -77,7 +76,6 @@ keyb_isr:
     pop di
     pop si
     pop bp
-    pop sp
     pop dx
     pop cx
     pop bx
