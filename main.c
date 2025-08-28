@@ -14,6 +14,9 @@ static uint64_t frame_time_us = 0;
 static uint32_t delta_time_us = 0;
 static uint16_t fps = 0;
 
+static uint8_t test_key_down = 0;
+static uint8_t test_value = 0;
+
 //
 
 #define KEY_BUFFER_SIZE 64
@@ -43,9 +46,23 @@ static void update_input() {
     uint8_t current_position = key_buffer_position;
 
     while (i != current_position) {
-        switch (key_buffer[i]) {
+        uint8_t v = key_buffer[i];
+        uint8_t key = v & KEY_INDEX_MASK;
+        uint8_t down = (v & KEY_UP_FLAG) == 0;
+        switch (key) {
             case KEY_ESC:
                 quit = 1;
+                break;
+
+            case KEY_SPACE:
+                if (down) {
+                    if (!test_key_down) {
+                        test_value = (test_value + 1) & 7;
+                        test_key_down = 1;
+                    }
+                } else {
+                    test_key_down = 0;
+                }
                 break;
 
             default:
@@ -170,6 +187,12 @@ void main() {
         vga_vsync();
 
         // TODO: Draw here
+
+        {
+            char buffer[32];
+            snprintf(buffer, 32, "%u", test_value);
+            putz_pos(buffer, 10, 10);
+        }
 
         print_time_and_fps();
     }

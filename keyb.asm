@@ -68,6 +68,14 @@ keyb_isr:
 
     call keyb_key_
 
+    ; Reset the keyboard control register
+    in al, 0x61 
+    or al, 0x82
+    out 0x61, al
+    and al, 0x7f
+    out 0x61, al
+
+    ; EOI
     mov al, 0x20
     out 0x20, al
 
